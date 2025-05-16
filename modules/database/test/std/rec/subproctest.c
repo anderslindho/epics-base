@@ -15,6 +15,7 @@
 #include <iocsh.h>
 #include "registryFunction.h"
 #include <subRecord.h>
+#include "errlog.h"
 
 static
 long subproc(subRecord *prec)
@@ -36,7 +37,9 @@ MAIN(subproctest)
     registryFunctionAdd("subproc", (REGISTRYFUNCTION) subproc);
     testdbReadDatabase("subproctest.db", NULL, "TPRO=0");
 
+    eltc(0);
     testIocInitOk();
+    eltc(1);
     testDiag("===== Test that invalid link in INPA field fails a put request ======");
 
     testdbPutFieldFail(-1, "InvalidINPARec.PROC", DBF_LONG, 1);

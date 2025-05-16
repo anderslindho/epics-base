@@ -15,6 +15,7 @@
 #include <dbAccess.h>
 #include <iocsh.h>
 #include <epicsExport.h>
+#include "errlog.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -51,7 +52,9 @@ MAIN(epicsExportTest)
 
     testDiag("Testing if dsets and functions are found");
     testdbReadDatabase("epicsExportTest.db", 0, 0);
+    eltc(0);
     testIocInitOk();
+    eltc(1);
 
     testDiag("Testing if dsets work correctly");
     testdbGetFieldEqual("li1", DBF_LONG, -1);

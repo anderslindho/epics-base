@@ -25,6 +25,7 @@
 #include "iocInit.h"
 #include "testMain.h"
 #include "epicsExport.h"
+#include "errlog.h"
 
 /* Test parameters */
 
@@ -167,8 +168,10 @@ MAIN(analogMonitorTest)
             "." OSI_PATH_LIST_SEPARATOR "..", NULL))
         testAbort("Error reading test database 'analogMonitorTest.db'");
 
+    eltc(0);
     /* Start the core IOC (no CA) */
     iocBuildIsolated();
+    eltc(1);
 
     evtctx = db_init_events();
     chfPluginRegister(test, &pif, NULL);

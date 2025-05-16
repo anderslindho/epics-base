@@ -17,6 +17,7 @@
 #include "osiFileName.h"
 #include "epicsThread.h"
 #include "dbScan.h"
+#include "errlog.h"
 
 void scanEventTest_registerRecordDeviceDriver(struct dbBase *);
 
@@ -79,7 +80,9 @@ MAIN(scanEventTest)
         sprintf(substitutions, "N=%d,EVENT=%s", i, events[i].name);
         testdbReadDatabase("scanEventTest.db", NULL, substitutions);
     }
+    eltc(0);
     testIocInitOk();
+    eltc(1);
     testDiag("Test if eventNameToHandle() strips spaces and handles numeric events");
     for (i = 0; i < NELEMENTS(events); i++) {
         EVENTPVT pev = eventNameToHandle(events[i].name);
