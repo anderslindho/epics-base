@@ -1,0 +1,27 @@
+name: Coverage Report
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+
+jobs:
+  coverage:
+    name: Generate Coverage Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential perl lcov genhtml libreadline-dev
+      - name: Build and generate coverage
+        run: make coverage
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: epics-coverage-html
+          path: out
+

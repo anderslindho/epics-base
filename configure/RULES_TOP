@@ -61,6 +61,14 @@ ifndef DISABLE_TOP_RULES
   runtests test-results:
 	@$(SHOWTESTFAILURES)
 
+  coverage:
+	$(MAKE) clean
+	$(MAKE) -j CFLAGS="--coverage -fPIC" CXXFLAGS="--coverage -fPIC" LDFLAGS="--coverage -fPIC"
+	$(MAKE) runtests
+	@lcov --capture --directory . --output-file coverage.info
+	@genhtml coverage.info --output-directory out --ignore-errors source
+	@echo "Coverage report generated in ./out/index.html"
+
 else
   #
   # Using a disabled rule aborts
@@ -95,6 +103,7 @@ help:
 	@echo "     tapfiles       - Run self-tests, save to O.<arch>/*.tap files"
 	@echo "     test-results   - Summarize all O.<arch>/*.tap files"
 	@echo "     clean-tests    - Removes all O.<arch>/*.tap files"
+	@echo "     coverage       - Build, install, run tests, and produce coverage report"
 	@echo "\"Partial\" build targets supported by Makefiles:"
 	@echo "     host           - Builds and installs $(EPICS_HOST_ARCH) only."
 	@echo "     inc$(DIVIDER)<arch>     - Installs <arch> only header files."
