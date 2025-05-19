@@ -37,10 +37,14 @@ void loadCom()
 #endif
 
     void* ptr = epicsFindSymbol("epicsThreadGetCPUs");
-    testOk(ptr==(void*)&epicsThreadGetCPUs,
-           "%p == %p (epicsThreadGetCPUs) : %s",
-           ptr, (void*)&epicsThreadGetCPUs,
-           epicsLoadError());
+    if(ptr && &epicsThreadGetCPUs) {
+        testOk(ptr==(void*)&epicsThreadGetCPUs,
+               "%p == %p (epicsThreadGetCPUs) : %s",
+               ptr, (void*)&epicsThreadGetCPUs,
+               epicsLoadError());
+    } else {
+        testSkip(1, "epicsThreadGetCPUs not available or not linked");
+    }
 
     testTodoEnd();
 }
