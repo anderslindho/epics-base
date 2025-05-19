@@ -83,7 +83,12 @@ MAIN(epicsLoadTest)
     // reference to ensure linkage when linking statically,
     // and actually use the result to make extra doubly sure that
     // this call isn't optimized out by eg. an LTO pass.
-    testDiag("# of CPUs %d", epicsThreadGetCPUs());
+    void* cpus_fn = epicsFindSymbol("epicsThreadGetCPUs");
+    if(cpus_fn) {
+        testDiag("# of CPUs %d", ((int(*)())cpus_fn)());
+    } else {
+        testSkip(1, "epicsThreadGetCPUs not available on this platform");
+    }
 
     loadBad();
 #if defined(__rtems__) || defined(vxWorks)
